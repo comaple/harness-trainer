@@ -15,6 +15,7 @@ feature implementation begins.
 - FR-006
 - FR-007
 - FR-008
+- FR-009
 
 ## Stories
 
@@ -22,11 +23,13 @@ feature implementation begins.
 - STORY-002: Add traceability and CI quality gates.
 - STORY-003: Enforce the main/feat branch workflow.
 - STORY-004: Enforce feature branch naming.
+- STORY-005: Add PRD requirement class governance.
 
 ## Acceptance Criteria
 
 - The project has a PRD, architecture document, epic file, and story files.
 - CI validates requirement traceability from PRD through code.
 - CI validates the `feat/<feature-description>` -> `main` branch workflow.
+- CI validates required PRD requirement classes.
 - Code changes include traceability markers.
 - Commit messages can be checked for FR and Story IDs.
