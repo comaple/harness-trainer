@@ -1,10 +1,59 @@
 # harness-trainer
 
-Harness trainer is a project for iteratively improving agent harnesses.
+`harness-trainer` is an engineering delivery system for enterprise business
+Agents.
 
-The target is not a model checkpoint. The target is the agent operating system:
-turn orchestration, tool policy, approval flow, budgets, resumable sessions,
-context compaction, skills, event streams, tracing, and local evaluation.
+It is not the business Agent itself. It is the construction crew for building
+one: it takes a business goal, business PRD, and business environment, then
+drives the work needed to produce a governed, observable, evaluable Agent
+Harness for that business Agent.
+
+The core deliverable is an Agent Harness and its training loop: turn
+orchestration, tool policy, approval flow, budgets, resumable sessions, context
+compaction, skills, event streams, tracing, local evaluation, and the
+keep/discard loop for improving the harness.
+
+## Product Boundary
+
+`harness-trainer` exists to turn enterprise business intent into an engineered
+Agent Harness.
+
+### Inputs
+
+- Business goals and success criteria
+- Business PRD, workflows, roles, risks, and acceptance criteria
+- Business environment inventory:
+  - tools and APIs
+  - databases and data sources
+  - knowledge bases and documents
+  - permission systems and secrets
+  - approval processes
+  - logging, monitoring, and audit systems
+- Agent operating constraints:
+  - model provider
+  - budget
+  - policy
+  - session and memory rules
+  - evaluator requirements
+
+### Outputs
+
+- Business Agent Harness blueprint
+- Worker contracts for tools, skills, policy, approval, budget, session,
+  events, and tracing
+- Environment integration plan
+- Agent runtime plan or implementation
+- Evaluation plan and deterministic harness evaluator
+- CI/CD and governance gates
+- Run logs, events, traces, scores, and keep/discard records
+
+### Non-Goals
+
+- It does not deliver a generic Agent marketplace.
+- It does not directly train language models.
+- It does not replace business PRD ownership.
+- It does not become a general workflow automation product.
+- It does not treat prompt management as the whole product.
 
 ## References
 
@@ -22,13 +71,13 @@ boundary, policy boundary, failure behavior, and observable output.
 
 ## Goal
 
-Create an autoresearch-style loop for harness engineering:
+Create an autoresearch-style loop for enterprise Agent Harness delivery:
 
-1. Define a deterministic local benchmark for harness quality.
-2. Let an agent propose one harness improvement.
-3. Apply the smallest useful change.
-4. Run the benchmark.
-5. Keep the change if the score improves or if behavior is preserved with a
+1. Ingest business goal, business PRD, and business environment.
+2. Generate the Agent Harness blueprint and worker contracts.
+3. Build or update the harness implementation.
+4. Run deterministic business and harness evaluators.
+5. Keep the change if scores improve or if behavior is preserved with a
    concrete simplification.
 6. Log the result and continue.
 
@@ -36,7 +85,9 @@ Create an autoresearch-style loop for harness engineering:
 
 - Do not train language models in this repository.
 - Do not modify or submit changes from the sibling `autoresearch` checkout.
-- Do not build a large framework before the local harness benchmark exists.
+- Do not build a generic Agent production platform or marketplace.
+- Do not build a large runtime before the business intake, harness contracts,
+  and evaluator spine are stable.
 
 ## Starting Point
 

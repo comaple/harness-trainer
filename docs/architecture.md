@@ -6,6 +6,12 @@
 boundary. Requirements are declared in the PRD, decomposed in epics, planned in
 stories, and enforced by a local CI gate.
 
+The product boundary is enterprise business Agent Harness delivery. A business
+team brings business goals, a business PRD, and a business environment. The
+system produces an Agent Harness blueprint, worker contracts, environment
+integration plan, evaluator plan, implementation evidence, and training loop for
+that business Agent Harness.
+
 ## Components
 
 ### Documentation Kernel
@@ -31,6 +37,41 @@ traceability, code traceability, and commit-message traceability.
 Future implementation should add a `harness/` package only after stories define
 its behavior. Expected runtime boundaries include turn orchestration, policy,
 approval, budget, session persistence, event streams, and evaluation.
+
+The planned harness runtime is decomposed into replaceable capabilities:
+
+- capability catalog and worker contract model
+- turn intake and orchestration
+- provider, credential, and model capability layer
+- skill discovery and prompt assembly
+- policy and approval gates
+- budget tracking, hooks, and side effects
+- session storage, memory, and context compaction
+- event streaming and end-to-end tracing
+- harness training evaluator
+
+Each capability must declare its public contract, state boundary, failure
+semantics, emitted events, and trace evidence before code is introduced.
+
+### Business Agent Delivery Pipeline
+
+The delivery pipeline is:
+
+```text
+Business Goal
+  -> Business PRD
+  -> Business Environment Inventory
+  -> Business Agent Harness Blueprint
+  -> Worker Contracts
+  -> Harness Runtime / Implementation Plan
+  -> Business Evaluator
+  -> CI Evidence + Run Evidence
+  -> Keep / Discard / Crash Decision
+```
+
+The pipeline is intentionally not an Agent marketplace or generic Agent
+production platform. It is an engineering system for delivering the harness that
+lets a specific business Agent run safely and improve over time.
 
 ## Traceability Model
 
