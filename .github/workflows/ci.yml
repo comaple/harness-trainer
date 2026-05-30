@@ -1,12 +1,25 @@
 name: CI
-# Traceability: FR-005, FR-007, FR-008, STORY-002, STORY-003, STORY-004
+# Traceability: FR-005, FR-007, FR-008, FR-010, FR-011, FR-012, STORY-002, STORY-003, STORY-004, STORY-006, STORY-007, STORY-008
 
 on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed
   push:
     branches:
       - main
       - "feat/**"
+      - "fix/**"
+      - "docs/**"
+      - "test/**"
+      - "refactor/**"
+      - "ci/**"
+      - "chore/**"
+      - "perf/**"
+      - "security/**"
 
 permissions:
   contents: read
@@ -20,6 +33,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -28,3 +43,37 @@ jobs:
 
       - name: Run repository gate
         run: python3 scripts/ci_check.py
+
+  delete-merged-work-branch:
+    name: Delete Merged Work Branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: >
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed' &&
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.base.ref == 'main'
+    permissions:
+      contents: write
+
+    steps:
+      - name: Delete merged work branch
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branch = context.payload.pull_request.head.ref;
+            const validWorkBranch = /^(feat|fix|docs|test|refactor|ci|chore|perf|security)\/[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(branch);
+            if (!validWorkBranch) {
+              core.info(`Skipping branch cleanup for ${branch}`);
+              return;
+            }
+            if (branch === 'main') {
+              core.setFailed('Refusing to delete main');
+              return;
+            }
+            await github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/${branch}`,
+            });
+            core.info(`Deleted merged work branch ${branch}`);
