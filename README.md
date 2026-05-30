@@ -66,18 +66,35 @@ The gate enforces agile traceability:
 - Stories in `docs/stories/` must reference valid FR and Epic IDs and include
   an implementation plan.
 - Source files must include a `Traceability: FR-XXX, STORY-XXX` marker.
-- CI commit messages must include at least one valid FR ID and Story ID.
+- CI commit messages must include at least one issue reference, valid FR ID, and
+  Story ID. Accepted issue formats are `ISSUE-123` and `#123`.
 
 ## Branch Workflow
 
-Use one protected integration branch and named feature branches:
+Use one protected integration branch and named work item branches:
 
 - `main`: protected integration branch.
-- `feat/<feature-description>`: development branch for sub-feature work.
+- `<type>/<description>`: development branch for issue-driven work.
 
-Develop and test on a named branch such as `feat/branch-naming-rules`. After
-the quality gate passes, merge that branch into `main`. CI enforces pull
-requests from `feat/<feature-description>` to `main`.
+Develop and test on a named branch such as `feat/branch-naming-rules`,
+`docs/prd-rules`, or `ci/delete-merged-branches`. After the quality gate passes,
+merge that branch into `main`. CI enforces pull requests from allowed work item
+branches to `main`.
 
-Branch names must include the function being changed. The bare branch name
-`feat` is not valid for implementation work.
+Allowed issue categories are:
+
+- `feat`
+- `fix`
+- `docs`
+- `test`
+- `refactor`
+- `ci`
+- `chore`
+- `perf`
+- `security`
+
+Branch names must include the category and work being changed. Bare category
+names such as `feat` or `docs` are not valid for implementation work.
+
+After a PR from an allowed work item branch to `main` is merged, GitHub Actions
+automatically deletes the merged remote branch.

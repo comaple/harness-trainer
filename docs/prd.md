@@ -79,23 +79,56 @@ metadata are inconsistent.
 The project must maintain an architecture document describing the major
 components, boundaries, and quality gates for the harness-training system.
 
-### FR-007: Main and Feat Branch Workflow
+### FR-007: Main and Work Branch Workflow
 
-The repository must use `main` as the integration branch and `feat/<feature>`
-branches as development branches. Sub-feature work is performed on a named
-`feat/<feature>` branch, validated by gates, and then merged into `main`.
+The repository must use `main` as the integration branch and named work item
+branches as development branches. Work is performed on an allowed
+`<type>/<description>` branch, validated by gates, and then merged into `main`.
 
-### FR-008: Feature Branch Naming
+### FR-008: Work Branch Naming
 
-Every development branch must use the `feat/<feature-description>` format. The
-description must identify the function being changed, for example
-`feat/branch-naming-rules` or `feat/ci-gates`. The bare branch name `feat` is
-not allowed for implementation work.
+Every development branch must use the `<type>/<description>` format. The type
+must be one of the allowed issue categories, and the description must identify
+the work being changed, for example `feat/branch-naming-rules`,
+`docs/prd-rules`, or `ci/delete-merged-branches`.
+
+Bare category names such as `feat` or `docs` are not allowed for implementation
+work.
 
 ### FR-009: PRD Requirement Classes
 
 The PRD must define and preserve the project requirement classes beyond
 functional requirements, and CI must reject PRDs that omit required classes.
+
+### FR-010: Delete Merged Feature Branches
+
+After a pull request from an allowed `<type>/<description>` branch to `main` is
+merged successfully, CI must automatically delete the merged remote work branch.
+The workflow must not delete `main` or any branch that does not match the
+work branch naming rule.
+
+### FR-011: Issue Category Taxonomy
+
+The project must define a controlled issue category taxonomy and use it for
+branch naming, CI branch validation, and merged branch cleanup.
+
+Allowed issue categories:
+
+- `feat`: new product behavior or user-facing capability.
+- `fix`: defect correction.
+- `docs`: documentation-only changes.
+- `test`: test coverage, test data, and test infrastructure.
+- `refactor`: behavior-preserving code or structure changes.
+- `ci`: CI/CD, automation, and release workflow changes.
+- `chore`: maintenance that does not change product behavior.
+- `perf`: performance improvements.
+- `security`: security hardening and vulnerability remediation.
+
+### FR-012: Commit Issue Binding
+
+Every commit must bind to an issue. CI must reject commits whose messages do not
+include either a GitHub issue reference such as `#123` or a stable issue token
+such as `ISSUE-123`.
 
 ## Non-Functional Requirements
 
@@ -117,7 +150,8 @@ consistent, it must reject the change.
 ## Constraints
 
 - The early quality gate must use only the Python standard library.
-- All implementation branches must follow `feat/<feature-description>`.
+- All implementation branches must follow `<type>/<description>` using an
+  allowed issue category.
 - The sibling `autoresearch` checkout is reference material only and must not be
   modified or submitted as part of this project.
 
@@ -143,6 +177,9 @@ consistent, it must reject the change.
 - A reviewer can identify why a code change exists from IDs in the commit and
   source file.
 - No code is merged without a corresponding story implementation plan.
-- CI rejects unsupported branch flows and malformed feature branch names when
+- CI rejects unsupported branch flows and malformed work branch names when
   running in GitHub Actions.
 - CI rejects PRDs that omit required requirement classes.
+- CI deletes merged allowed work branches after successful
+  merge.
+- CI rejects commits that are not bound to an issue.

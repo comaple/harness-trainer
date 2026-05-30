@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Traceability: FR-005, FR-007, FR-008, FR-009, STORY-002, STORY-003, STORY-004, STORY-005
+# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008
 """
 Repository quality gate for harness-trainer.
 
@@ -31,6 +31,9 @@ REQUIRED_FILES = [
     "docs/stories/STORY-003-branch-workflow-gate.md",
     "docs/stories/STORY-004-feature-branch-naming.md",
     "docs/stories/STORY-005-prd-requirement-classes.md",
+    "docs/stories/STORY-006-delete-merged-feature-branches.md",
+    "docs/stories/STORY-007-issue-category-taxonomy.md",
+    "docs/stories/STORY-008-commit-issue-binding.md",
     "scripts/ci_check.py",
 ]
 
@@ -54,9 +57,13 @@ FR_ID = re.compile(r"\bFR-\d{3}\b")
 NFR_ID = re.compile(r"\bNFR-\d{3}\b")
 EPIC_ID = re.compile(r"\bEPIC-\d{3}\b")
 STORY_ID = re.compile(r"\bSTORY-\d{3}\b")
+ISSUE_REF = re.compile(r"(?:\bISSUE-\d+\b|(?<![\w/])#\d+\b)")
 TRACEABILITY_MARKER = re.compile(r"Traceability:\s*(?P<ids>.+)")
 SOURCE_SUFFIXES = {".py", ".yml", ".yaml", ".js", ".ts", ".tsx", ".jsx", ".sh"}
-FEATURE_BRANCH = re.compile(r"^feat/[a-z0-9][a-z0-9-]*[a-z0-9]$")
+WORK_BRANCH_TYPES = ("feat", "fix", "docs", "test", "refactor", "ci", "chore", "perf", "security")
+WORK_BRANCH = re.compile(
+    rf"^({'|'.join(WORK_BRANCH_TYPES)})/[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
+)
 REQUIRED_PRD_SECTIONS = [
     "## Product",
     "## Requirement Taxonomy",
@@ -316,8 +323,22 @@ def ensure_code_traceability(fr_ids: set[str], story_ids: set[str]) -> None:
 
 
 def commit_range_from_env() -> list[str]:
+    event_name = os.environ.get("GITHUB_EVENT_NAME", "")
+    base_ref = os.environ.get("GITHUB_BASE_REF", "")
     before = os.environ.get("GITHUB_EVENT_BEFORE")
     sha = os.environ.get("GITHUB_SHA")
+
+    if event_name == "pull_request" and base_ref:
+        try:
+            output = subprocess.check_output(
+                ["git", "log", "--format=%s%n%b%x00", f"origin/{base_ref}..HEAD"],
+                cwd=ROOT,
+                text=True,
+            )
+            return [item.strip() for item in output.split("\0") if item.strip()]
+        except subprocess.CalledProcessError:
+            return []
+
     if before and sha and not set(before) == {"0"}:
         try:
             output = subprocess.check_output(
@@ -339,8 +360,12 @@ def ensure_commit_traceability(fr_ids: set[str], story_ids: set[str]) -> None:
     errors = []
     for message in messages:
         subject = message.splitlines()[0]
+        issues = set(ISSUE_REF.findall(message))
         refs = set(FR_ID.findall(message))
         stories = set(STORY_ID.findall(message))
+        if not issues:
+            errors.append(f"{subject}: missing issue reference ISSUE-123 or #123")
+            continue
         if not refs or not stories:
             errors.append(f"{subject}: missing FR-XXX or STORY-XXX")
             continue
@@ -369,18 +394,18 @@ def ensure_branch_workflow() -> None:
     if event_name == "pull_request":
         if base_ref != "main":
             fail(f"pull requests must target main, got {base_ref!r}")
-        if not FEATURE_BRANCH.fullmatch(head_ref):
+        if not WORK_BRANCH.fullmatch(head_ref):
             fail(
-                "pull requests must originate from feat/<feature-description>, "
+                "pull requests must originate from an allowed <type>/<description> branch, "
                 f"got {head_ref!r}"
             )
         ok(f"pull request branch flow is {head_ref} -> main")
         return
 
     if event_name == "push":
-        if ref_name != "main" and not FEATURE_BRANCH.fullmatch(ref_name):
+        if ref_name != "main" and not WORK_BRANCH.fullmatch(ref_name):
             fail(
-                "push CI is only allowed on main or feat/<feature-description>, "
+                "push CI is only allowed on main or allowed <type>/<description> branches, "
                 f"got {ref_name!r}"
             )
         ok(f"push branch {ref_name!r} is allowed")

@@ -164,8 +164,8 @@ Before committing:
 2. Run `python3 scripts/ci_check.py`.
 3. Make sure source files include a valid `Traceability: FR-XXX, STORY-XXX`
    marker.
-4. Use a commit message that includes at least one valid `FR-XXX` and
-   `STORY-XXX` ID.
+4. Use a commit message that includes at least one issue reference
+   (`ISSUE-123` or `#123`), one valid `FR-XXX`, and one valid `STORY-XXX` ID.
 5. Do not stage files from sibling repositories.
 6. Keep commits focused on one harness-training improvement.
 
@@ -174,10 +174,15 @@ gate as a blocker, not advisory output.
 
 ## Branch Workflow
 
-Use `main` as the protected integration branch and
-`feat/<feature-description>` as the development branch pattern. All sub-feature
-work happens on a named feature branch, for example
-`feat/branch-naming-rules`; after tests and gates pass, merge that branch into
+Use `main` as the protected integration branch and `<type>/<description>` as
+the development branch pattern. All issue-driven work happens on a named work
+branch, for example `feat/branch-naming-rules`, `docs/prd-rules`, or
+`ci/delete-merged-branches`; after tests and gates pass, merge that branch into
 `main`.
 
-The bare branch name `feat` is not valid for implementation work.
+Allowed issue categories are `feat`, `fix`, `docs`, `test`, `refactor`, `ci`,
+`chore`, `perf`, and `security`.
+
+Bare category names such as `feat` or `docs` are not valid for implementation
+work. Merged remote work branches are deleted automatically by GitHub Actions
+after successful merge.

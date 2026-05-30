@@ -55,20 +55,48 @@ consistent, the change is rejected.
 
 ## Branching Model
 
-The project uses one protected integration branch and named feature branches:
+The project uses one protected integration branch and named work item branches:
 
 - `main`: protected integration branch.
-- `feat/<feature-description>`: development branch for sub-feature work.
+- `<type>/<description>`: development branch for issue-driven work.
 
-Feature implementation happens on a named `feat/<feature-description>` branch.
-After local checks and CI pass, that branch is merged into `main`.
+Implementation happens on a named work item branch. After local checks and CI
+pass, that branch is merged into `main`.
 
 Branch naming rules:
 
-- Must start with `feat/`.
-- Must include a non-empty feature description after the slash.
+- Must start with one allowed issue category followed by `/`.
+- Must include a non-empty description after the slash.
 - Prefer lowercase kebab-case, such as `feat/branch-naming-rules`.
-- Must not be the bare branch name `feat`.
+- Must not be a bare category name such as `feat` or `docs`.
+
+Allowed categories:
+
+- `feat`
+- `fix`
+- `docs`
+- `test`
+- `refactor`
+- `ci`
+- `chore`
+- `perf`
+- `security`
 
 CI rejects pull requests that do not target `main`, do not originate from a
-valid `feat/<feature-description>` branch, or push to unsupported branch names.
+valid `<type>/<description>` branch, or push to unsupported branch names.
+
+## Merged Branch Cleanup
+
+GitHub Actions listens for merged pull requests. When a pull request is closed
+with `merged == true`, has base branch `main`, and has a head branch matching an
+allowed `<type>/<description>` pattern, the workflow deletes the remote head
+branch.
+
+The cleanup job must fail closed:
+
+- It must not run for unmerged closed pull requests.
+- It must not delete `main`.
+- It must not delete branches outside the allowed `<type>/<description>`
+  pattern.
+- It must use repository-scoped `contents: write` permission only for the
+  cleanup job.

@@ -11,15 +11,15 @@ EPIC-001
 
 ## User Story
 
-As a project maintainer, I want all sub-feature work to happen on named
-`feat/<feature-description>` branches and merge into `main` only after gates
-pass so that the repository follows a simple agile integration model.
+As a project maintainer, I want all issue-driven work to happen on named
+`<type>/<description>` branches and merge into `main` only after gates pass so
+that the repository follows a simple agile integration model.
 
 ## Implementation Plan
 
-1. Document the `main` and `feat/<feature-description>` branch roles in the
+1. Document the `main` and `<type>/<description>` branch roles in the
    architecture.
-2. Update GitHub Actions to run on pushes to `main` and `feat/**`.
+2. Update GitHub Actions to run on pushes to `main` and allowed work branches.
 3. Extend `scripts/ci_check.py` to validate branch flow when GitHub Actions
    environment variables are present.
 4. Keep local execution permissive so developers can run the gate before any
@@ -27,9 +27,8 @@ pass so that the repository follows a simple agile integration model.
 
 ## Acceptance Criteria
 
-- CI runs on pushes to `main` and `feat/**`.
-- CI accepts pull requests from valid `feat/<feature-description>` branches to
-  `main`.
+- CI runs on pushes to `main` and allowed work branch patterns.
+- CI accepts pull requests from valid `<type>/<description>` branches to `main`.
 - CI rejects pull requests targeting a branch other than `main`.
-- CI rejects pull requests whose source branch is not a valid `feat/...` branch.
+- CI rejects pull requests whose source branch is not a valid work item branch.
 - Local `python3 scripts/ci_check.py` still runs outside GitHub Actions.
