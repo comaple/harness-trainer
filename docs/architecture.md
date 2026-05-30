@@ -49,11 +49,20 @@ consistent, the change is rejected.
 
 ## Branching Model
 
-The project uses two long-lived branches:
+The project uses one protected integration branch and named feature branches:
 
 - `main`: protected integration branch.
-- `feat`: development branch for all sub-feature work.
+- `feat/<feature-description>`: development branch for sub-feature work.
 
-Feature implementation happens on `feat`. After local checks and CI pass, `feat`
-is merged into `main`. CI rejects pull requests that do not target `main` or do
-not originate from `feat`, and rejects pushes to unsupported branch names.
+Feature implementation happens on a named `feat/<feature-description>` branch.
+After local checks and CI pass, that branch is merged into `main`.
+
+Branch naming rules:
+
+- Must start with `feat/`.
+- Must include a non-empty feature description after the slash.
+- Prefer lowercase kebab-case, such as `feat/branch-naming-rules`.
+- Must not be the bare branch name `feat`.
+
+CI rejects pull requests that do not target `main`, do not originate from a
+valid `feat/<feature-description>` branch, or push to unsupported branch names.

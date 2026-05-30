@@ -41,9 +41,16 @@ components, boundaries, and quality gates for the harness-training system.
 
 ### FR-007: Main and Feat Branch Workflow
 
-The repository must use `main` as the integration branch and `feat` as the
-development branch. Sub-feature work is performed on `feat`, validated by gates,
-and then merged into `main`.
+The repository must use `main` as the integration branch and `feat/<feature>`
+branches as development branches. Sub-feature work is performed on a named
+`feat/<feature>` branch, validated by gates, and then merged into `main`.
+
+### FR-008: Feature Branch Naming
+
+Every development branch must use the `feat/<feature-description>` format. The
+description must identify the function being changed, for example
+`feat/branch-naming-rules` or `feat/ci-gates`. The bare branch name `feat` is
+not allowed for implementation work.
 
 ## Success Metrics
 
@@ -52,4 +59,5 @@ and then merged into `main`.
 - A reviewer can identify why a code change exists from IDs in the commit and
   source file.
 - No code is merged without a corresponding story implementation plan.
-- CI rejects unsupported branch flows when running in GitHub Actions.
+- CI rejects unsupported branch flows and malformed feature branch names when
+  running in GitHub Actions.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Traceability: FR-005, FR-007, STORY-002, STORY-003
+# Traceability: FR-005, FR-007, FR-008, STORY-002, STORY-003, STORY-004
 """
 Repository quality gate for harness-trainer.
 
@@ -29,6 +29,7 @@ REQUIRED_FILES = [
     "docs/stories/STORY-001-project-charter.md",
     "docs/stories/STORY-002-traceability-gate.md",
     "docs/stories/STORY-003-branch-workflow-gate.md",
+    "docs/stories/STORY-004-feature-branch-naming.md",
     "scripts/ci_check.py",
 ]
 
@@ -51,6 +52,7 @@ EPIC_ID = re.compile(r"\bEPIC-\d{3}\b")
 STORY_ID = re.compile(r"\bSTORY-\d{3}\b")
 TRACEABILITY_MARKER = re.compile(r"Traceability:\s*(?P<ids>.+)")
 SOURCE_SUFFIXES = {".py", ".yml", ".yaml", ".js", ".ts", ".tsx", ".jsx", ".sh"}
+FEATURE_BRANCH = re.compile(r"^feat/[a-z0-9][a-z0-9-]*[a-z0-9]$")
 
 
 def fail(message: str) -> None:
@@ -326,14 +328,20 @@ def ensure_branch_workflow() -> None:
     if event_name == "pull_request":
         if base_ref != "main":
             fail(f"pull requests must target main, got {base_ref!r}")
-        if head_ref != "feat":
-            fail(f"pull requests must originate from feat, got {head_ref!r}")
-        ok("pull request branch flow is feat -> main")
+        if not FEATURE_BRANCH.fullmatch(head_ref):
+            fail(
+                "pull requests must originate from feat/<feature-description>, "
+                f"got {head_ref!r}"
+            )
+        ok(f"pull request branch flow is {head_ref} -> main")
         return
 
     if event_name == "push":
-        if ref_name not in {"main", "feat"}:
-            fail(f"push CI is only allowed on main or feat, got {ref_name!r}")
+        if ref_name != "main" and not FEATURE_BRANCH.fullmatch(ref_name):
+            fail(
+                "push CI is only allowed on main or feat/<feature-description>, "
+                f"got {ref_name!r}"
+            )
         ok(f"push branch {ref_name!r} is allowed")
         return
 

@@ -172,6 +172,10 @@ gate as a blocker, not advisory output.
 
 ## Branch Workflow
 
-Use `main` as the protected integration branch and `feat` as the development
-branch. All sub-feature work happens on `feat`; after tests and gates pass,
-merge `feat` into `main`.
+Use `main` as the protected integration branch and
+`feat/<feature-description>` as the development branch pattern. All sub-feature
+work happens on a named feature branch, for example
+`feat/branch-naming-rules`; after tests and gates pass, merge that branch into
+`main`.
+
+The bare branch name `feat` is not valid for implementation work.

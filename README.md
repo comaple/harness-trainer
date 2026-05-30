@@ -67,10 +67,14 @@ The gate enforces agile traceability:
 
 ## Branch Workflow
 
-Use two long-lived branches:
+Use one protected integration branch and named feature branches:
 
 - `main`: protected integration branch.
-- `feat`: development branch for all sub-feature work.
+- `feat/<feature-description>`: development branch for sub-feature work.
 
-Develop and test on `feat`. After the quality gate passes, merge `feat` into
-`main`. CI enforces pull requests from `feat` to `main`.
+Develop and test on a named branch such as `feat/branch-naming-rules`. After
+the quality gate passes, merge that branch into `main`. CI enforces pull
+requests from `feat/<feature-description>` to `main`.
+
+Branch names must include the function being changed. The bare branch name
+`feat` is not valid for implementation work.

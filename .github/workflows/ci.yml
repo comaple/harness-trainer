@@ -1,12 +1,12 @@
 name: CI
-# Traceability: FR-005, FR-007, STORY-002, STORY-003
+# Traceability: FR-005, FR-007, FR-008, STORY-002, STORY-003, STORY-004
 
 on:
   pull_request:
   push:
     branches:
       - main
-      - feat
+      - "feat/**"
 
 permissions:
   contents: read
