@@ -1,0 +1,18 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+
+# Virtual environments
+.venv/
+venv/
+
+# Local harness experiment outputs
+harness_results.tsv
+harness_run.log
+results.tsv
+
+# Local editor and OS noise
+.DS_Store
+.idea/
+.vscode/
+
