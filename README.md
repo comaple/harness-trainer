@@ -58,6 +58,9 @@ Gate` workflow must pass before merging.
 
 The gate enforces agile traceability:
 
+- PRDs must include business requirements, user requirements, functional
+  requirements, non-functional requirements, constraints, assumptions and
+  dependencies, out-of-scope items, and success metrics.
 - Requirements must first appear as `FR-XXX` entries in [docs/prd.md](docs/prd.md).
 - Epics in `docs/epics/` must reference valid FR IDs and list stories.
 - Stories in `docs/stories/` must reference valid FR and Epic IDs and include

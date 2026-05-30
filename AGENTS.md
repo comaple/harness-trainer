@@ -91,9 +91,11 @@ Python standard library for early benchmark and harness logic.
 For harness-training changes, use this loop:
 
 1. Inspect the current repository state.
-2. Add or update the requirement in `docs/prd.md` as an `FR-XXX` item before
-   implementation.
-3. Decompose the requirement in a matching epic under `docs/epics/`.
+2. Add or update product context in `docs/prd.md` before implementation. Use
+   `BR-XXX` for business requirements, `UR-XXX` for user requirements, `FR-XXX`
+   for functional requirements, and `NFR-XXX` for non-functional requirements.
+3. Decompose the relevant functional requirement in a matching epic under
+   `docs/epics/`.
 4. Create or update a story under `docs/stories/` with a concrete
    implementation plan.
 5. Run the local harness benchmark if one exists.

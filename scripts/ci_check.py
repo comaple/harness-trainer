@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Traceability: FR-005, FR-007, FR-008, STORY-002, STORY-003, STORY-004
+# Traceability: FR-005, FR-007, FR-008, FR-009, STORY-002, STORY-003, STORY-004, STORY-005
 """
 Repository quality gate for harness-trainer.
 
@@ -30,6 +30,7 @@ REQUIRED_FILES = [
     "docs/stories/STORY-002-traceability-gate.md",
     "docs/stories/STORY-003-branch-workflow-gate.md",
     "docs/stories/STORY-004-feature-branch-naming.md",
+    "docs/stories/STORY-005-prd-requirement-classes.md",
     "scripts/ci_check.py",
 ]
 
@@ -47,12 +48,27 @@ UNTRACKED_ONLY_FILES = [
 ]
 
 LOCAL_MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\((?!https?://|mailto:|#)([^)]+)\)")
+BR_ID = re.compile(r"\bBR-\d{3}\b")
+UR_ID = re.compile(r"\bUR-\d{3}\b")
 FR_ID = re.compile(r"\bFR-\d{3}\b")
+NFR_ID = re.compile(r"\bNFR-\d{3}\b")
 EPIC_ID = re.compile(r"\bEPIC-\d{3}\b")
 STORY_ID = re.compile(r"\bSTORY-\d{3}\b")
 TRACEABILITY_MARKER = re.compile(r"Traceability:\s*(?P<ids>.+)")
 SOURCE_SUFFIXES = {".py", ".yml", ".yaml", ".js", ".ts", ".tsx", ".jsx", ".sh"}
 FEATURE_BRANCH = re.compile(r"^feat/[a-z0-9][a-z0-9-]*[a-z0-9]$")
+REQUIRED_PRD_SECTIONS = [
+    "## Product",
+    "## Requirement Taxonomy",
+    "## Business Requirements",
+    "## User Requirements",
+    "## Functional Requirements",
+    "## Non-Functional Requirements",
+    "## Constraints",
+    "## Assumptions and Dependencies",
+    "## Out of Scope",
+    "## Success Metrics",
+]
 
 
 def fail(message: str) -> None:
@@ -170,6 +186,31 @@ def ensure_text_files_have_trailing_newline() -> None:
 
 def ids_in(path: Path, pattern: re.Pattern[str]) -> set[str]:
     return set(pattern.findall(path.read_text(encoding="utf-8")))
+
+
+def ensure_prd_requirement_classes() -> None:
+    prd = ROOT / "docs" / "prd.md"
+    text = prd.read_text(encoding="utf-8")
+
+    missing_sections = [section for section in REQUIRED_PRD_SECTIONS if section not in text]
+    if missing_sections:
+        fail("docs/prd.md missing required sections: " + ", ".join(missing_sections))
+
+    required_ids = {
+        "business requirements": (BR_ID, "BR-XXX"),
+        "user requirements": (UR_ID, "UR-XXX"),
+        "functional requirements": (FR_ID, "FR-XXX"),
+        "non-functional requirements": (NFR_ID, "NFR-XXX"),
+    }
+    missing_ids = [
+        f"{label} ({example})"
+        for label, (pattern, example) in required_ids.items()
+        if not pattern.search(text)
+    ]
+    if missing_ids:
+        fail("docs/prd.md missing stable IDs for: " + ", ".join(missing_ids))
+
+    ok("PRD requirement classes are present")
 
 
 def ensure_agile_traceability() -> tuple[set[str], set[str], set[str]]:
@@ -373,6 +414,7 @@ def main() -> int:
     ensure_no_nested_git_repos()
     ensure_markdown_local_links()
     ensure_text_files_have_trailing_newline()
+    ensure_prd_requirement_classes()
     fr_ids, _epic_ids, story_ids = ensure_agile_traceability()
     ensure_code_traceability(fr_ids, story_ids)
     ensure_commit_traceability(fr_ids, story_ids)

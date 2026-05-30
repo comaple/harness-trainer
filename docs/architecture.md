@@ -35,12 +35,18 @@ approval, budget, session persistence, event streams, and evaluation.
 ## Traceability Model
 
 ```text
-FR-XXX in docs/prd.md
+ BR-XXX / UR-XXX / FR-XXX / NFR-XXX in docs/prd.md
   -> EPIC-XXX in docs/epics/
     -> STORY-XXX in docs/stories/
       -> Traceability marker in code
         -> Commit message containing FR-XXX and STORY-XXX
 ```
+
+Functional requirements are the required implementation traceability anchor for
+epics, stories, source markers, and commits. Business, user, and non-functional
+requirements provide product context and quality constraints; they are enforced
+through PRD structure checks, story acceptance criteria, architecture decisions,
+and quality gates.
 
 ## Quality Gate Policy
 
