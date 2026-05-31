@@ -51,7 +51,10 @@ changes are planned, traceable, reviewed, and gated before integration.
 ### BR-002: Replaceable Harness Capabilities
 
 The product must help teams design and train harnesses as replaceable
-capabilities rather than as a monolithic agent framework.
+capabilities rather than as a monolithic agent framework. A capability is
+replaceable only when its public contract, state ownership, failure semantics,
+events, and evaluator evidence are explicit enough that an alternative
+implementation can be compared without rewriting neighboring capabilities.
 
 ### BR-003: Enterprise Business Agent Delivery
 
@@ -179,13 +182,16 @@ such as `ISSUE-123`.
 
 The project must maintain a catalog of harness capabilities derived from the
 agent harness reference model. The catalog must group capabilities by product
-area and identify their contracts, state, events, and failure behavior.
+area and identify their contracts, state, events, failure behavior,
+replacement boundary, and evaluator evidence.
 
 ### FR-014: Worker Contract Model
 
 The project must define a reusable worker contract model for harness
 capabilities, including function IDs, inputs, outputs, errors, timeouts,
-persisted state, emitted events, and replaceability boundaries.
+persisted state, emitted events, versioning expectations, and replaceability
+boundaries. The contract must make it possible to compare two implementations
+of the same capability against the same inputs, outputs, failures, and traces.
 
 ### FR-015: Turn Intake and Orchestration
 
@@ -232,7 +238,9 @@ whole turn.
 
 The product must define a deterministic evaluator that scores harness designs
 and implementation artifacts against the capability catalog, contract coverage,
-failure semantics, and observability requirements.
+failure semantics, observability requirements, and replacement safety. The
+evaluator must identify whether a capability can be swapped while preserving
+its declared contract and regression evidence.
 
 ### FR-023: Product Boundary Definition
 
@@ -293,7 +301,8 @@ consistent, it must reject the change.
 
 Harness capabilities must be specified so that one implementation can be
 replaced without changing neighboring capabilities when the public contract is
-preserved.
+preserved. Replacement claims must be backed by contract compatibility,
+state-boundary clarity, failure-mode equivalence, and evaluator evidence.
 
 ### NFR-005: Observability
 
@@ -366,6 +375,8 @@ ignore `.env` and `.env.*`, and CI must reject any tracked local secret file.
 - Each planned harness capability maps to at least one Epic and Story.
 - Harness runtime stories specify contract, state, failure, and observability
   expectations before implementation.
+- Reviewers can inspect a planned capability and determine its replacement
+  boundary, comparable implementations, and evaluator evidence.
 - Every business Agent delivery package maps business goals and business
   environment inputs to harness capabilities and evaluator checks.
 - Local `.env` files are ignored and never tracked.
