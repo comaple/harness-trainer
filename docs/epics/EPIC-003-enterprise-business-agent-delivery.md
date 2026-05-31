@@ -13,6 +13,7 @@ the construction system for enterprise business Agent Harnesses.
 - FR-026
 - FR-027
 - FR-028
+- FR-029
 
 ## Stories
 
@@ -22,6 +23,7 @@ the construction system for enterprise business Agent Harnesses.
 - STORY-022: Define business Agent Harness blueprint.
 - STORY-023: Define enterprise delivery package.
 - STORY-024: Define business evaluation mapping.
+- STORY-026: Define code agent execution package.
 
 ## Acceptance Criteria
 
@@ -33,4 +35,5 @@ the construction system for enterprise business Agent Harnesses.
   plan, CI evidence, and run evidence.
 - Business evaluation criteria map back to business goals and acceptance
   criteria.
-
+- Code-agent-assisted implementation work is bounded by issue, story, spec,
+  contract, evaluator, allowed edit surface, and review evidence.

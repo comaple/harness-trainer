@@ -10,6 +10,39 @@ observable, evaluable Agent Harness.
 The product must preserve a traceable path from business intent to PRD, Epic,
 Story, implementation, commit, evaluation, and delivery evidence.
 
+## Post-Delivery Operating Model
+
+After delivery, `harness-trainer` is used by an enterprise Agent delivery team
+to coordinate business intent, engineering implementation, code-agent execution,
+quality gates, and review evidence.
+
+The primary user is the Agent Harness delivery team. That team includes business
+owners, Agent product owners, analysts, harness architects, platform engineers,
+programmers, reviewers, and code agents. Programmers and code agents are
+execution participants, not the sole target user and not the source of product
+truth.
+
+The product must guide this operating model:
+
+```text
+Business owner / product owner
+  -> supplies business goal, business PRD, workflows, risks, and success metrics
+Harness architect
+  -> creates blueprint, worker contracts, policy, approval, budget, session,
+     tracing, and evaluator expectations
+Programmer or code agent
+  -> implements bounded stories and specs
+Quality gate and evaluator
+  -> verify traceability, contract coverage, replacement safety, and run
+     evidence
+Reviewer
+  -> decides keep, discard, retry, or handoff based on evidence
+```
+
+The product must not become a free-form code generation interface. It must
+constrain code-agent work with PRD entries, epics, stories, specs, worker
+contracts, CI gates, deterministic evaluators, and auditable delivery evidence.
+
 ## Source Material
 
 - Agent harness reference:
@@ -61,6 +94,12 @@ implementation can be compared without rewriting neighboring capabilities.
 The product must support enterprise-grade delivery of business Agent Harnesses
 from business goals, business PRDs, and business environment definitions.
 
+### BR-004: Code-Agent-Assisted Delivery Governance
+
+The product must let delivery teams use programmers and code agents to implement
+bounded harness work while preserving business ownership, traceability,
+contracts, evaluator evidence, and human review.
+
 ## User Requirements
 
 ### UR-001: Maintainer Traceability
@@ -93,6 +132,12 @@ criteria, and risks map into Agent Harness capabilities and evaluator checks.
 Platform engineers must be able to identify which tools, APIs, databases,
 knowledge sources, permission systems, and observability systems the Agent
 Harness must integrate with.
+
+### UR-007: Code Agent Work Control
+
+Harness delivery leads must be able to hand a code agent a bounded issue,
+story, spec, and evaluator expectation so that generated changes remain inside
+the approved delivery plan.
 
 ## Functional Requirements
 
@@ -280,6 +325,13 @@ The product must map business success criteria and acceptance criteria into
 deterministic evaluator checks, regression fixtures, and run evidence so that
 harness training optimizes business-relevant outcomes.
 
+### FR-029: Code Agent Execution Package
+
+The product must be able to package bounded implementation work for programmers
+or code agents, including the issue reference, PRD requirement IDs, story ID,
+spec context, worker contract expectations, evaluator command, allowed files,
+and acceptance evidence required before review.
+
 ## Non-Functional Requirements
 
 ### NFR-001: Auditability
@@ -333,6 +385,9 @@ ignore `.env` and `.env.*`, and CI must reject any tracked local secret file.
   modified or submitted as part of this project.
 - Local secrets must be stored in ignored files such as `.env` and never
   committed.
+- Code agents must not be treated as autonomous product owners. They execute
+  bounded work packages and remain subject to PRD, story, contract, evaluator,
+  and review gates.
 
 ## Assumptions and Dependencies
 
@@ -345,6 +400,9 @@ ignore `.env` and `.env.*`, and CI must reject any tracked local secret file.
   exists.
 - The business Agent owner supplies or approves the business PRD and environment
   inventory.
+- Delivery teams will use programmers or code agents for implementation, but
+  harness-trainer remains responsible for structuring, gating, and evaluating
+  that work.
 
 ## Out of Scope
 
@@ -358,6 +416,8 @@ ignore `.env` and `.env.*`, and CI must reject any tracked local secret file.
 - Owning the business outcome directly. The product builds and trains the
   harness that serves a business Agent; the business team remains accountable
   for business goals and domain correctness.
+- Acting as a free-form code generation interface where prompts replace PRD,
+  story, contract, evaluator, and review evidence.
 
 ## Success Metrics
 
@@ -379,4 +439,6 @@ ignore `.env` and `.env.*`, and CI must reject any tracked local secret file.
   boundary, comparable implementations, and evaluator evidence.
 - Every business Agent delivery package maps business goals and business
   environment inputs to harness capabilities and evaluator checks.
+- Code-agent-assisted implementation work can be traced from issue to PRD,
+  story, spec, worker contract, evaluator result, and review decision.
 - Local `.env` files are ignored and never tracked.
