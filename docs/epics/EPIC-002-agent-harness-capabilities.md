@@ -37,6 +37,7 @@ on the harness reference article.
 - Every Story includes a concrete implementation plan.
 - Each capability identifies its public contract, state boundary, failure
   behavior, and observability evidence.
+- Replacement-sensitive capabilities identify evaluator evidence and
+  replacement safety criteria before implementation begins.
 - The decomposition does not require adopting any specific external harness
   framework.
-

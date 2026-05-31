@@ -17,7 +17,21 @@ work can be planned as replaceable parts instead of as one monolithic framework.
 ## Implementation Plan
 
 1. Create a capability catalog under `docs/harness/capability-catalog.md`.
-2. Group capabilities into product areas:
+2. Define each catalog entry with these required fields:
+   - capability ID
+   - capability name
+   - product area
+   - owning FR IDs
+   - owning Story IDs
+   - intent
+   - public contract surface
+   - state ownership
+   - emitted events
+   - failure behavior
+   - replacement boundary
+   - evaluator evidence
+   - trace evidence
+3. Group capabilities into product areas:
    - turn runtime
    - provider and credentials
    - skills and prompt assembly
@@ -26,17 +40,22 @@ work can be planned as replaceable parts instead of as one monolithic framework.
    - session and context
    - events and tracing
    - evaluation
-3. For each capability, record:
-   - contract surface
-   - persisted state
-   - emitted events
-   - failure behavior
-   - replacement boundary
-4. Cross-reference each capability to its FR and Story.
+4. Include at least one catalog row for each runtime FR from `FR-013` through
+   `FR-022`.
+5. Cross-reference each capability to its FR and Story.
+6. Add a short validation checklist at the end of the catalog that reviewers can
+   use before implementation begins.
 
 ## Acceptance Criteria
 
 - The catalog covers all runtime FRs from `FR-013` through `FR-022`.
-- Every catalog row has a replacement boundary.
-- Every catalog row has at least one testable evidence item.
-
+- Every catalog row has a public contract surface, state ownership statement,
+  emitted event expectation, failure behavior, replacement boundary, evaluator
+  evidence, and trace evidence.
+- Every catalog row has at least one testable evidence item that can be used by
+  the harness training evaluator.
+- The catalog remains technology-neutral and does not select a runtime
+  framework.
+- The catalog references
+  `docs/specs/spec-replaceable-harness-capabilities/SPEC.md` as the governing
+  specification.
