@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, FR-024, FR-025, FR-026, FR-027, FR-028, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-020, STORY-021, STORY-022, STORY-023, STORY-024, STORY-025
+# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, FR-024, FR-025, FR-026, FR-027, FR-028, FR-029, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-020, STORY-021, STORY-022, STORY-023, STORY-024, STORY-025, STORY-026
 """
 Repository quality gate for harness-trainer.
 
@@ -35,6 +35,8 @@ REQUIRED_FILES = [
     "docs/evaluation/business-evaluation-mapping-template.md",
     "docs/delivery/README.md",
     "docs/delivery/enterprise-delivery-package-template.md",
+    "docs/execution/README.md",
+    "docs/execution/code-agent-execution-package-template.md",
     "docs/epics/EPIC-001-governance-and-gates.md",
     "docs/stories/STORY-001-project-charter.md",
     "docs/stories/STORY-002-traceability-gate.md",
@@ -285,6 +287,67 @@ REQUIRED_DELIVERY_PACKAGE_MARKERS = [
     "rollback",
     "open question",
     "missing evidence",
+    "without relying on chat history",
+]
+CODE_AGENT_EXECUTION_PACKAGE_TEMPLATE = (
+    ROOT / "docs" / "execution" / "code-agent-execution-package-template.md"
+)
+REQUIRED_EXECUTION_PACKAGE_SECTIONS = [
+    "# Code Agent Execution Package Template",
+    "## Package Metadata",
+    "## Source Context",
+    "## Work Scope",
+    "## Allowed Edit Surface",
+    "## Disallowed Changes",
+    "## Required Commands and Gates",
+    "## Evaluator Expectations",
+    "## Implementation Evidence",
+    "## Test and CI Evidence",
+    "## Evaluator Output and Run Evidence",
+    "## Assumptions, Deviations, and Open Risks",
+    "## Review Decision",
+    "## Package Readiness",
+]
+REQUIRED_EXECUTION_PACKAGE_MARKERS = [
+    "issue reference",
+    "epic id",
+    "fr id",
+    "story id",
+    "source spec",
+    "worker contract",
+    "blueprint slice",
+    "evaluation mapping",
+    "enterprise delivery package",
+    "allowed edit surface",
+    "disallowed changes",
+    "business goals",
+    "prd scope",
+    "environment access boundary",
+    "policy",
+    "approval",
+    "budget",
+    "evaluator criteria",
+    "required commands",
+    "ci",
+    "evaluator",
+    "validation command",
+    "fixture",
+    "scenario",
+    "expected pass signal",
+    "implementation evidence",
+    "test evidence",
+    "evaluator output",
+    "run evidence",
+    "event evidence",
+    "trace evidence",
+    "assumptions",
+    "deviations",
+    "open risks",
+    "keep",
+    "revise",
+    "discard",
+    "retry",
+    "handoff",
     "without relying on chat history",
 ]
 
@@ -817,6 +880,32 @@ def ensure_enterprise_delivery_package_template() -> None:
     ok("enterprise delivery package template is structured")
 
 
+def ensure_code_agent_execution_package_template() -> None:
+    text = CODE_AGENT_EXECUTION_PACKAGE_TEMPLATE.read_text(encoding="utf-8")
+    missing_sections = [
+        section for section in REQUIRED_EXECUTION_PACKAGE_SECTIONS
+        if section not in text
+    ]
+    if missing_sections:
+        fail(
+            "code agent execution package template missing sections: "
+            + ", ".join(missing_sections)
+        )
+
+    lower_text = text.lower()
+    missing_markers = [
+        marker for marker in REQUIRED_EXECUTION_PACKAGE_MARKERS
+        if marker not in lower_text
+    ]
+    if missing_markers:
+        fail(
+            "code agent execution package template missing markers: "
+            + ", ".join(missing_markers)
+        )
+
+    ok("code agent execution package template is structured")
+
+
 def main() -> int:
     print(f"Repository: {ROOT}")
     ensure_repo_root()
@@ -837,6 +926,7 @@ def main() -> int:
     ensure_business_agent_harness_blueprint_template()
     ensure_business_evaluation_mapping_template()
     ensure_enterprise_delivery_package_template()
+    ensure_code_agent_execution_package_template()
     print("CI gate passed.")
     return 0
 

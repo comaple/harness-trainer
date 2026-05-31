@@ -86,6 +86,7 @@ Agent Harness.
 - CI/CD and governance gates
 - Run logs, events, traces, scores, and keep/discard records
 - Enterprise delivery package for audit, review, and operational handoff
+- Code-agent execution package for bounded implementation work
 
 ### Non-Goals
 
