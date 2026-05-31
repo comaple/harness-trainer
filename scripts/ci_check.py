@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, FR-024, FR-025, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-020, STORY-021, STORY-025
+# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, FR-024, FR-025, FR-026, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-020, STORY-021, STORY-022, STORY-025
 """
 Repository quality gate for harness-trainer.
 
@@ -29,6 +29,8 @@ REQUIRED_FILES = [
     "docs/intake/business-context-template.md",
     "docs/inventory/README.md",
     "docs/inventory/business-environment-template.md",
+    "docs/blueprint/README.md",
+    "docs/blueprint/business-agent-harness-template.md",
     "docs/epics/EPIC-001-governance-and-gates.md",
     "docs/stories/STORY-001-project-charter.md",
     "docs/stories/STORY-002-traceability-gate.md",
@@ -149,6 +151,50 @@ REQUIRED_ENVIRONMENT_MARKERS = [
     "open question",
     "access request",
     "blueprint",
+]
+BUSINESS_AGENT_HARNESS_BLUEPRINT_TEMPLATE = (
+    ROOT / "docs" / "blueprint" / "business-agent-harness-template.md"
+)
+REQUIRED_BLUEPRINT_SECTIONS = [
+    "# Business Agent Harness Blueprint Template",
+    "## Blueprint Metadata",
+    "## Source Inputs",
+    "## Agent Purpose",
+    "## User Tasks",
+    "## Business Goal to Harness Capability Mapping",
+    "## Tools and Worker Contract Candidates",
+    "## Knowledge Access",
+    "## Policy Rules",
+    "## Approval Flow",
+    "## Budget Constraints",
+    "## Session and Memory Rules",
+    "## Events and Tracing",
+    "## Evaluation Expectations",
+    "## Risks and Missing Dependencies",
+    "## Implementation Story Slices",
+    "## Code-Agent Work Package Boundaries",
+    "## Blueprint Readiness",
+]
+REQUIRED_BLUEPRINT_MARKERS = [
+    "agent purpose",
+    "user task",
+    "business goal",
+    "harness capability",
+    "environment item",
+    "worker contract",
+    "policy rule",
+    "approval",
+    "budget",
+    "session",
+    "event",
+    "trace",
+    "evaluator",
+    "risk",
+    "missing dependency",
+    "implementation story",
+    "code-agent",
+    "allowed edit surface",
+    "validation command",
 ]
 
 
@@ -586,6 +632,39 @@ def ensure_business_environment_inventory_template() -> None:
     ok("business environment inventory template is structured")
 
 
+def ensure_business_agent_harness_blueprint_template() -> None:
+    text = BUSINESS_AGENT_HARNESS_BLUEPRINT_TEMPLATE.read_text(encoding="utf-8")
+    missing_sections = [
+        section for section in REQUIRED_BLUEPRINT_SECTIONS if section not in text
+    ]
+    if missing_sections:
+        fail(
+            "business agent harness blueprint template missing sections: "
+            + ", ".join(missing_sections)
+        )
+
+    lower_text = text.lower()
+    missing_markers = [
+        marker for marker in REQUIRED_BLUEPRINT_MARKERS if marker not in lower_text
+    ]
+    if missing_markers:
+        fail(
+            "business agent harness blueprint template missing markers: "
+            + ", ".join(missing_markers)
+        )
+
+    missing_areas = [
+        area for area in REQUIRED_HARNESS_AREAS if f"`{area}`" not in text
+    ]
+    if missing_areas:
+        fail(
+            "business agent harness blueprint template missing harness areas: "
+            + ", ".join(missing_areas)
+        )
+
+    ok("business agent harness blueprint template is structured")
+
+
 def main() -> int:
     print(f"Repository: {ROOT}")
     ensure_repo_root()
@@ -603,6 +682,7 @@ def main() -> int:
     ensure_bmad_config_if_present()
     ensure_business_context_intake_template()
     ensure_business_environment_inventory_template()
+    ensure_business_agent_harness_blueprint_template()
     print("CI gate passed.")
     return 0
 
