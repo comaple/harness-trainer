@@ -85,6 +85,7 @@ Agent Harness.
 - Evaluation plan and deterministic harness evaluator
 - CI/CD and governance gates
 - Run logs, events, traces, scores, and keep/discard records
+- Enterprise delivery package for audit, review, and operational handoff
 
 ### Non-Goals
 
