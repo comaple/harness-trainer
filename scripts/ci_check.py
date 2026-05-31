@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008
+# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-025
 """
 Repository quality gate for harness-trainer.
 
@@ -34,20 +34,28 @@ REQUIRED_FILES = [
     "docs/stories/STORY-006-delete-merged-feature-branches.md",
     "docs/stories/STORY-007-issue-category-taxonomy.md",
     "docs/stories/STORY-008-commit-issue-binding.md",
+    "docs/stories/STORY-025-ignore-local-secret-files.md",
     "scripts/ci_check.py",
 ]
 
 REQUIRED_GITIGNORE_PATTERNS = [
     "__pycache__/",
     ".venv/",
+    ".env",
+    ".env.*",
     "harness_results.tsv",
     "harness_run.log",
 ]
 
 UNTRACKED_ONLY_FILES = [
+    ".env",
     "harness_results.tsv",
     "harness_run.log",
     "results.tsv",
+]
+
+UNTRACKED_ONLY_PATTERNS = [
+    re.compile(r"^\.env(?:\..+)?$"),
 ]
 
 LOCAL_MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\((?!https?://|mailto:|#)([^)]+)\)")
@@ -119,9 +127,12 @@ def ensure_gitignore_patterns() -> None:
 def ensure_generated_files_untracked() -> None:
     tracked = set(run_git(["ls-files"]).splitlines())
     bad = [path for path in UNTRACKED_ONLY_FILES if path in tracked]
+    for path in tracked:
+        if any(pattern.fullmatch(path) for pattern in UNTRACKED_ONLY_PATTERNS):
+            bad.append(path)
     if bad:
         fail(f"generated result files must not be tracked: {', '.join(bad)}")
-    ok("generated experiment files are not tracked")
+    ok("generated and secret local files are not tracked")
 
 
 def iter_project_files() -> list[Path]:

@@ -19,6 +19,7 @@ feature implementation begins.
 - FR-010
 - FR-011
 - FR-012
+- NFR-008
 
 ## Stories
 
@@ -30,6 +31,7 @@ feature implementation begins.
 - STORY-006: Delete merged feature branches.
 - STORY-007: Define issue category branch taxonomy.
 - STORY-008: Require issue binding on commits.
+- STORY-025: Ignore local secret files.
 
 ## Acceptance Criteria
 
@@ -40,5 +42,6 @@ feature implementation begins.
 - CI validates allowed issue categories.
 - CI deletes merged work item branches.
 - CI validates issue binding for every commit.
+- CI validates local secret files are ignored and untracked.
 - Code changes include traceability markers.
 - Commit messages can be checked for FR and Story IDs.

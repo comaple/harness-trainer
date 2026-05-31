@@ -310,6 +310,11 @@ specified with recovery paths for interrupted or resumed runs.
 Business Agent Harness delivery must account for auditability, access control,
 environment integration risk, operational handoff, and repeatable evaluation.
 
+### NFR-008: Local Secret Hygiene
+
+Local secret files must remain outside version control. The repository must
+ignore `.env` and `.env.*`, and CI must reject any tracked local secret file.
+
 ## Constraints
 
 - The early quality gate must use only the Python standard library.
@@ -317,6 +322,8 @@ environment integration risk, operational handoff, and repeatable evaluation.
   allowed issue category.
 - The sibling `autoresearch` checkout is reference material only and must not be
   modified or submitted as part of this project.
+- Local secrets must be stored in ignored files such as `.env` and never
+  committed.
 
 ## Assumptions and Dependencies
 
@@ -361,3 +368,4 @@ environment integration risk, operational handoff, and repeatable evaluation.
   expectations before implementation.
 - Every business Agent delivery package maps business goals and business
   environment inputs to harness capabilities and evaluator checks.
+- Local `.env` files are ignored and never tracked.
