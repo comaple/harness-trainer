@@ -1,0 +1,24 @@
+{
+  "name": "complete harness design",
+  "type": "harness_design",
+  "expected": "pass",
+  "capability_coverage": [
+    "FR-013",
+    "FR-014",
+    "FR-015",
+    "FR-016",
+    "FR-017",
+    "FR-018",
+    "FR-019",
+    "FR-020",
+    "FR-021",
+    "FR-022"
+  ],
+  "contract_complete": true,
+  "replacement_safety": true,
+  "failure_semantics": true,
+  "state_boundaries": true,
+  "policy_and_approval_safety": true,
+  "observability": true,
+  "traceability": true
+}

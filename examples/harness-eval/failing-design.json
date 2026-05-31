@@ -1,0 +1,17 @@
+{
+  "name": "incomplete harness design",
+  "type": "harness_design",
+  "expected": "fail",
+  "capability_coverage": [
+    "FR-013",
+    "FR-014",
+    "FR-015"
+  ],
+  "contract_complete": false,
+  "replacement_safety": false,
+  "failure_semantics": true,
+  "state_boundaries": false,
+  "policy_and_approval_safety": false,
+  "observability": true,
+  "traceability": true
+}
