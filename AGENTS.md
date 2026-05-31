@@ -166,8 +166,9 @@ Before committing:
    marker.
 4. Use a commit message that includes at least one issue reference
    (`ISSUE-123` or `#123`), one valid `FR-XXX`, and one valid `STORY-XXX` ID.
-5. Do not stage files from sibling repositories.
-6. Keep commits focused on one harness-training improvement.
+5. Never stage `.env`, `.env.*`, or any local secret file.
+6. Do not stage files from sibling repositories.
+7. Keep commits focused on one harness-training improvement.
 
 CI must run the same gate on pull requests and pushes to `main`. Treat a failing
 gate as a blocker, not advisory output.

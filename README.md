@@ -119,6 +119,7 @@ The gate enforces agile traceability:
 - Source files must include a `Traceability: FR-XXX, STORY-XXX` marker.
 - CI commit messages must include at least one issue reference, valid FR ID, and
   Story ID. Accepted issue formats are `ISSUE-123` and `#123`.
+- Local secret files such as `.env` and `.env.*` must be ignored and untracked.
 
 ## Branch Workflow
 

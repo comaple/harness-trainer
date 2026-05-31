@@ -6,6 +6,10 @@ __pycache__/
 .venv/
 venv/
 
+# Local secrets
+.env
+.env.*
+
 # Local harness experiment outputs
 harness_results.tsv
 harness_run.log
@@ -15,4 +19,3 @@ results.tsv
 .DS_Store
 .idea/
 .vscode/
-
