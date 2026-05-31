@@ -25,6 +25,54 @@ Build a small, iterative harness-training system inspired by autoresearch:
 The object under optimization is the harness, not the benchmark task executed by
 the harness.
 
+## Product Alignment Guardrails
+
+This project is for enterprise Agent Harness delivery. It is not a generic
+Agent production platform, a free-form code generation interface, a prompt
+manager, or a language-model training project.
+
+The delivered product is used by an Agent Harness delivery team. That team may
+include business owners, Agent product owners, analysts, harness architects,
+platform engineers, programmers, reviewers, and code agents. Programmers and
+code agents are execution roles; they do not replace the business owner, product
+owner, architect, reviewer, PRD, story, contract, evaluator, or delivery
+evidence.
+
+When in doubt, preserve this delivery model:
+
+```text
+business goal / business PRD / environment inventory
+  -> harness blueprint
+  -> worker contracts
+  -> issue / story / spec
+  -> programmer or code-agent execution
+  -> CI and evaluator evidence
+  -> human review
+  -> keep / discard / retry / handoff decision
+```
+
+Do not turn the repository into a tool that simply asks a code agent to write
+whatever code seems useful. Every implementation must remain anchored to
+business intent, approved requirements, bounded stories, explicit contracts, and
+objective evaluation evidence.
+
+## Code Agent Collaboration Model
+
+Code agents may be used as implementation workers for this project. A code
+agent should receive a bounded work package before editing code:
+
+- issue reference
+- `FR-XXX` requirement ID
+- `STORY-XXX` story ID
+- relevant spec or worker contract
+- expected evaluator or CI command
+- allowed edit surface
+- acceptance evidence required for review
+
+The code agent's job is to implement the bounded package, run the required
+checks, and report evidence. The delivery lead or reviewer decides whether the
+change is kept, revised, discarded, or handed off.
+
 ## Working Directory
 
 All implementation work for this project must happen inside this repository:

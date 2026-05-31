@@ -13,6 +13,45 @@ orchestration, tool policy, approval flow, budgets, resumable sessions, context
 compaction, skills, event streams, tracing, local evaluation, and the
 keep/discard loop for improving the harness.
 
+## Post-Delivery Usage Model
+
+The delivered product is used by an enterprise Agent delivery team, not only by
+programmers. Programmers and code agents are execution roles inside the delivery
+loop; they do not own the product direction by themselves.
+
+The primary users are:
+
+- Business owners who provide goals, workflows, risks, acceptance criteria, and
+  success metrics.
+- Agent product owners or analysts who structure the business intent into
+  delivery-ready requirements.
+- Harness architects who turn business intent into an Agent Harness blueprint,
+  worker contracts, policies, approval flows, budgets, sessions, tracing, and
+  evaluators.
+- Platform engineers and programmers who implement the planned harness pieces.
+- Code agents that execute bounded stories and specs under the repository's
+  gates, contracts, and evaluator checks.
+
+The intended operating model is:
+
+```text
+Delivery Team
+  -> captures business goal, business PRD, and environment inventory
+  -> uses harness-trainer to produce blueprint, contracts, stories, specs, and
+     evaluator expectations
+  -> gives bounded implementation tasks to programmers or code agents
+  -> validates changes through CI, traceability gates, and deterministic
+     evaluators
+  -> reviews keep / discard / crash evidence
+  -> ships an auditable Agent Harness delivery package
+```
+
+`harness-trainer` is therefore the engineering context generator, task
+organizer, quality gate, and evidence collector for code-agent-assisted Agent
+Harness delivery. A code agent can write code, but this repository defines what
+the code must satisfy, why it exists, how it is evaluated, and when it is safe
+to keep.
+
 ## Product Boundary
 
 `harness-trainer` exists to turn enterprise business intent into an engineered
@@ -52,6 +91,8 @@ Agent Harness.
 - It does not deliver a generic Agent marketplace.
 - It does not directly train language models.
 - It does not replace business PRD ownership.
+- It does not let programmers or code agents redefine business goals without
+  traceable business approval.
 - It does not become a general workflow automation product.
 - It does not treat prompt management as the whole product.
 
