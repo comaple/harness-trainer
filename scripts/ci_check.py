@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, FR-024, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-020, STORY-025
+# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, FR-024, FR-025, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-020, STORY-021, STORY-025
 """
 Repository quality gate for harness-trainer.
 
@@ -27,6 +27,8 @@ REQUIRED_FILES = [
     "docs/architecture.md",
     "docs/intake/README.md",
     "docs/intake/business-context-template.md",
+    "docs/inventory/README.md",
+    "docs/inventory/business-environment-template.md",
     "docs/epics/EPIC-001-governance-and-gates.md",
     "docs/stories/STORY-001-project-charter.md",
     "docs/stories/STORY-002-traceability-gate.md",
@@ -114,6 +116,39 @@ REQUIRED_HARNESS_AREAS = [
     "events",
     "tracing",
     "evaluation",
+]
+BUSINESS_ENVIRONMENT_TEMPLATE = ROOT / "docs" / "inventory" / "business-environment-template.md"
+REQUIRED_BUSINESS_ENVIRONMENT_SECTIONS = [
+    "# Business Environment Inventory Template",
+    "## Inventory Metadata",
+    "## Environment Summary",
+    "## Tools and APIs",
+    "## Databases and Data Sources",
+    "## Knowledge Bases and Documents",
+    "## Permission Systems",
+    "## Approval Processes",
+    "## Secrets and Credentials",
+    "## Logging, Monitoring, Metrics, and Audit Systems",
+    "## Assumptions",
+    "## Open Questions",
+    "## Access Requests",
+    "## Harness Mapping",
+    "## Blueprint Readiness",
+]
+REQUIRED_ENVIRONMENT_MARKERS = [
+    "owner",
+    "access method",
+    "access boundary",
+    "risk",
+    "test strategy",
+    "worker contract",
+    "policy rule",
+    "secret value",
+    "confirmed",
+    "assumption",
+    "open question",
+    "access request",
+    "blueprint",
 ]
 
 
@@ -518,6 +553,39 @@ def ensure_business_context_intake_template() -> None:
     ok("business context intake template is structured")
 
 
+def ensure_business_environment_inventory_template() -> None:
+    text = BUSINESS_ENVIRONMENT_TEMPLATE.read_text(encoding="utf-8")
+    missing_sections = [
+        section for section in REQUIRED_BUSINESS_ENVIRONMENT_SECTIONS if section not in text
+    ]
+    if missing_sections:
+        fail(
+            "business environment inventory template missing sections: "
+            + ", ".join(missing_sections)
+        )
+
+    lower_text = text.lower()
+    missing_markers = [
+        marker for marker in REQUIRED_ENVIRONMENT_MARKERS if marker not in lower_text
+    ]
+    if missing_markers:
+        fail(
+            "business environment inventory template missing markers: "
+            + ", ".join(missing_markers)
+        )
+
+    missing_areas = [
+        area for area in REQUIRED_HARNESS_AREAS if f"`{area}`" not in text
+    ]
+    if missing_areas:
+        fail(
+            "business environment inventory template missing harness areas: "
+            + ", ".join(missing_areas)
+        )
+
+    ok("business environment inventory template is structured")
+
+
 def main() -> int:
     print(f"Repository: {ROOT}")
     ensure_repo_root()
@@ -534,6 +602,7 @@ def main() -> int:
     ensure_branch_workflow()
     ensure_bmad_config_if_present()
     ensure_business_context_intake_template()
+    ensure_business_environment_inventory_template()
     print("CI gate passed.")
     return 0
 
