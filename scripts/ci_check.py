@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-025
+# Traceability: FR-005, FR-007, FR-008, FR-009, FR-010, FR-011, FR-012, FR-024, NFR-008, STORY-002, STORY-003, STORY-004, STORY-005, STORY-006, STORY-007, STORY-008, STORY-020, STORY-025
 """
 Repository quality gate for harness-trainer.
 
@@ -25,6 +25,8 @@ REQUIRED_FILES = [
     ".github/workflows/ci.yml",
     "docs/prd.md",
     "docs/architecture.md",
+    "docs/intake/README.md",
+    "docs/intake/business-context-template.md",
     "docs/epics/EPIC-001-governance-and-gates.md",
     "docs/stories/STORY-001-project-charter.md",
     "docs/stories/STORY-002-traceability-gate.md",
@@ -83,6 +85,35 @@ REQUIRED_PRD_SECTIONS = [
     "## Assumptions and Dependencies",
     "## Out of Scope",
     "## Success Metrics",
+]
+
+BUSINESS_CONTEXT_TEMPLATE = ROOT / "docs" / "intake" / "business-context-template.md"
+REQUIRED_BUSINESS_CONTEXT_SECTIONS = [
+    "# Business Context Intake Template",
+    "## Intake Metadata",
+    "## Business Goals",
+    "## Business PRD",
+    "## Stakeholders and Roles",
+    "## Business Workflows",
+    "## Constraints",
+    "## Risks",
+    "## Success Metrics",
+    "## Acceptance Criteria",
+    "## Assumptions Requiring Business Owner Confirmation",
+    "## Open Questions",
+    "## Harness Capability Mapping",
+    "## Blueprint Readiness",
+]
+REQUIRED_HARNESS_AREAS = [
+    "tools",
+    "knowledge",
+    "policy",
+    "approval",
+    "budget",
+    "session",
+    "events",
+    "tracing",
+    "evaluation",
 ]
 
 
@@ -447,6 +478,46 @@ def ensure_bmad_config_if_present() -> None:
     ok("BMad config matches harness-trainer project")
 
 
+def ensure_business_context_intake_template() -> None:
+    text = BUSINESS_CONTEXT_TEMPLATE.read_text(encoding="utf-8")
+    missing_sections = [
+        section for section in REQUIRED_BUSINESS_CONTEXT_SECTIONS if section not in text
+    ]
+    if missing_sections:
+        fail(
+            "business context intake template missing sections: "
+            + ", ".join(missing_sections)
+        )
+
+    missing_areas = [
+        area for area in REQUIRED_HARNESS_AREAS if f"`{area}`" not in text
+    ]
+    if missing_areas:
+        fail(
+            "business context intake template missing harness areas: "
+            + ", ".join(missing_areas)
+        )
+
+    required_markers = [
+        "confirmed",
+        "assumption",
+        "open question",
+        "business owner confirmation",
+        "blueprint",
+    ]
+    lower_text = text.lower()
+    missing_markers = [
+        marker for marker in required_markers if marker not in lower_text
+    ]
+    if missing_markers:
+        fail(
+            "business context intake template missing readiness markers: "
+            + ", ".join(missing_markers)
+        )
+
+    ok("business context intake template is structured")
+
+
 def main() -> int:
     print(f"Repository: {ROOT}")
     ensure_repo_root()
@@ -462,6 +533,7 @@ def main() -> int:
     ensure_commit_traceability(fr_ids, story_ids)
     ensure_branch_workflow()
     ensure_bmad_config_if_present()
+    ensure_business_context_intake_template()
     print("CI gate passed.")
     return 0
 
