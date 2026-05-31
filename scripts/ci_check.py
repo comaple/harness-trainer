@@ -342,7 +342,13 @@ def commit_range_from_env() -> list[str]:
     if event_name == "pull_request" and base_ref:
         try:
             output = subprocess.check_output(
-                ["git", "log", "--format=%s%n%b%x00", f"origin/{base_ref}..HEAD"],
+                [
+                    "git",
+                    "log",
+                    "--no-merges",
+                    "--format=%s%n%b%x00",
+                    f"origin/{base_ref}..HEAD",
+                ],
                 cwd=ROOT,
                 text=True,
             )
