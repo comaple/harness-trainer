@@ -1,0 +1,13 @@
+{
+  "name": "accepted worker replacement",
+  "type": "replacement_candidate",
+  "expected": "accepted",
+  "checks": {
+    "contract_compatibility": true,
+    "state_boundary_compatibility": true,
+    "failure_mode_equivalence": true,
+    "event_compatibility": true,
+    "trace_compatibility": true,
+    "regression_fixture_result": true
+  }
+}

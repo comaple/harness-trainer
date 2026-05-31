@@ -1,0 +1,13 @@
+{
+  "name": "rejected worker replacement",
+  "type": "replacement_candidate",
+  "expected": "rejected",
+  "checks": {
+    "contract_compatibility": true,
+    "state_boundary_compatibility": false,
+    "failure_mode_equivalence": false,
+    "event_compatibility": true,
+    "trace_compatibility": false,
+    "regression_fixture_result": true
+  }
+}
